@@ -21,14 +21,25 @@
 <body style="font-family: sans-serif">
 <div id="ClockDisplay" class="clock"></div>
 <script type="text/javascript">
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+    });
+
     function showTime(){
         var date = new Date();
         var hours = date.getHours(); // 0 - 23
-        var minutes = date.getMinutes(); // 0 - 59
+        var minutes = date.getMinutes();
+        var seconds = date.getSeconds();
 
         hours = (hours < 10) ? "0" + hours : hours;
         minutes = (minutes < 10) ? "0" + minutes : minutes;
+        seconds = (seconds < 10) ? "0" + seconds : seconds;
         var time = hours + ":" + minutes;
+
+        if (params.showSeconds == true) {
+            var time = time + ":" + seconds
+        }
+
         document.getElementById("ClockDisplay").innerText = time;
     }
     // Start initial call of showTime so there isn't a delay for display
